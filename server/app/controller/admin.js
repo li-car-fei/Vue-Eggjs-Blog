@@ -10,7 +10,7 @@ class AdminController extends Controller {
 
         const data = await ctx.service.admin.get_source(ctx.Model);
 
-        console.log(data);
+        //console.log(data);
 
         ctx.body = data;
     }
@@ -61,8 +61,8 @@ class AdminController extends Controller {
 
         const result = await ctx.service.admin.update_source(ctx.Model, ctx.resource_id, ctx.request.body);
 
-        console.log(result);
-        
+        //console.log(result);
+
         if (result) {
             ctx.body = '更新成功';
         }

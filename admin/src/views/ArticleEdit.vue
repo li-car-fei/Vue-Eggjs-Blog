@@ -8,6 +8,12 @@
       <el-form-item label="摘要">
         <el-input type="textarea" v-model="model.summary"></el-input>
       </el-form-item>
+      <el-form-item label="阅读量">
+        <el-input-number v-model="model.read"></el-input-number>
+      </el-form-item>
+      <el-form-item label="点赞量">
+        <el-input-number v-model="model.fav"></el-input-number>
+      </el-form-item>
       <el-form-item label="分类">
         <el-select multiple v-model="model.categories" placeholder="请选择文章分类">
           <el-option

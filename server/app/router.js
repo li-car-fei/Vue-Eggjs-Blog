@@ -51,8 +51,12 @@ module.exports = app => {
   // 获取指定页码的文章
   router.get('/index/api/articles/:pageNum', response, controller.index.get_pageNum_articles);
 
-  // 获取文章详情     category 外键填充
+  // 获取文章详情，并且阅读 +1     category 外键填充
   router.get('/index/api/article/:id', response, controller.index.get_article_detail);
+
+  // 点赞文章
+  router.get('/index/api/article/fav/:id',response,controller.index.fav_in_article);
+
 
   // 按照 create 年份 进行归类后的文章数据
   router.get('/index/api/archive', response, controller.index.get_years_articles);

@@ -8,6 +8,8 @@ const schema = new mongoose.Schema({
     },
     summary: { type: String },
     body: { type: String },
+    read: { type: Number },
+    fav: { type: Number },
     categories: [{
         type: mongoose.SchemaTypes.ObjectId,       // 指向 外键
         ref: 'Category'

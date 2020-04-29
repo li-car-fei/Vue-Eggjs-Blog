@@ -35,6 +35,15 @@ class IndexController extends Controller {
         ctx.body = data;
     }
 
+    async fav_in_article(){
+        const { ctx } = this;
+        // 先拿到文章的 _id
+        const id = ctx.params.id;
+        const data=await ctx.service.index.fav_in_article(id);
+
+        ctx.body=data;
+    }
+
     async get_years_articles() {
         const { ctx } = this;
         const data = await ctx.service.index.get_years_articles();

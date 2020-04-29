@@ -35,7 +35,26 @@ class IndexService extends Service {
     }
 
     async get_article_detail(id) {
+        const pre_data = await Article.findById(id);
+        const change_read=pre_data.read+1;
+        await Article.findByIdAndUpdate((id),{
+            $set:{read:change_read}
+        })
+
         return await Article.findById(id).populate('categories');     // 根据id找到文章 ， 并且填充外键 
+    }
+
+    async fav_in_article(id){
+        const pre_data = await Article.findById(id);
+        const change_fav=pre_data.fav+1;
+
+        const res=await Article.findByIdAndUpdate((id),{
+            $set:{fav:change_fav}
+        });
+
+        console.log(res);
+
+        return '点赞成功'
     }
 
     async get_years_articles() {

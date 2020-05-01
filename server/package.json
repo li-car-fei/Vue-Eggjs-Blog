@@ -7,7 +7,6 @@
     "declarations": true
   },
   "dependencies": {
-    "bcrypt": "^4.0.1",
     "bcryptjs": "^2.4.3",
     "body-parse": "^0.1.0",
     "cors": "^2.8.5",
@@ -16,7 +15,7 @@
     "egg-scripts": "^2.11.0",
     "inflection": "^1.12.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.9",
+    "mongoose": "^5.9.10",
     "multer": "^1.4.2",
     "node-pre-gyp": "^0.14.0",
     "nodemon": "^2.0.3",

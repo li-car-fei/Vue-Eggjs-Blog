@@ -13,6 +13,10 @@ const schema = new mongoose.Schema({
     categories: [{
         type: mongoose.SchemaTypes.ObjectId,       // 指向 外键
         ref: 'Category'
+    }],
+    comments: [{
+        type: mongoose.SchemaTypes.ObjectId,        // 指向 外键
+        ref: 'Comment'
     }]
 }, {
     timestamps: true                            // 自动添加 建立和更改的时间

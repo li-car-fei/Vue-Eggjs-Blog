@@ -14,8 +14,9 @@ const Service = require('egg').Service;
 
 class AdminService extends Service {
     async get_source(Model) {
-        //console.log(Model);
+        console.log(Model);
         const data = await Model.find();
+        console.log('查找成功')
         return data
     }
 

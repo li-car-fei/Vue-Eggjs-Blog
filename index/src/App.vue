@@ -31,6 +31,10 @@
               <i class="el-icon-date"></i>
               <span slot="title">时间</span>
             </el-menu-item>
+            <el-menu-item index="4" @click="golink">
+              <i class="el-icon-user-solid"></i>
+              <span slot="title">我的</span>
+            </el-menu-item>
           </el-menu>
         </el-aside>
         <el-container>
@@ -63,6 +67,9 @@ export default {
           break;
         case 3:
           this.$router.push("/archive");
+          break;
+        case 4:
+          this.$router.push("/mine");
           break;
         default:
           this.$message({

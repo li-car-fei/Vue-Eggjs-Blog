@@ -8,6 +8,6 @@ module.exports = app => {
         dbName: 'myblog'         // 数据库名
     });
 
-    // __dirname：    获得当前执行文件所在目录的完整目录名
-    //const models = require('require-all')(__dirname + '/../models')
+    //__dirname：    获得当前执行文件所在目录的完整目录名
+    const models = require('require-all')(__dirname + '/../models')
 }

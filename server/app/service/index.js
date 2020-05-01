@@ -1,8 +1,15 @@
 'use strict';
 
+// 加密用的bcrypt
+const bcrypt = require('bcryptjs');
+
+// jwt token 
+const jwt = require('jsonwebtoken');
+
 const Article = require('../models/Article');
-//const User = require('../models/User');
+const User = require('../models/User');
 const Category = require('../models/Category');
+const Comment=require('../models/Comment')
 
 const Service = require('egg').Service;
 
@@ -36,20 +43,26 @@ class IndexService extends Service {
 
     async get_article_detail(id) {
         const pre_data = await Article.findById(id);
-        const change_read=pre_data.read+1;
-        await Article.findByIdAndUpdate((id),{
-            $set:{read:change_read}
+        const change_read = pre_data.read + 1;
+        await Article.findByIdAndUpdate((id), {
+            $set: { read: change_read }
         })
 
-        return await Article.findById(id).populate('categories');     // 根据id找到文章 ， 并且填充外键 
+        //return await Article.findById(id).populate('categories');     // 根据id找到文章 ， 并且填充外键 
+        return await Article.findById(id).
+            populate({
+                path: 'comments',
+                populate: { path: 'user', select: 'username' }
+            }).populate('categories')
+
     }
 
-    async fav_in_article(id){
+    async fav_in_article(id) {
         const pre_data = await Article.findById(id);
-        const change_fav=pre_data.fav+1;
+        const change_fav = pre_data.fav + 1;
 
-        const res=await Article.findByIdAndUpdate((id),{
-            $set:{fav:change_fav}
+        const res = await Article.findByIdAndUpdate(id, {
+            $set: { fav: change_fav }
         });
 
         console.log(res);
@@ -100,6 +113,59 @@ class IndexService extends Service {
             }
         ]);
     }
+
+    async login(username, password) {
+        // 查询user， 带上password返回
+        const user = await User.findOne({ username }).select('+password');
+        if (!user) {
+            return '用户名错误'
+        };
+
+        // 验证密码是否正确
+        const isValid = bcrypt.compareSync(password, user.password);
+        if (!isValid) {
+            return '密码错误'
+        };
+
+        // 根据用户的 _id 生成jwt token并返回
+
+        // 拿到key                    config.keys.split('_')[1];
+        const key = this.app.config.keys.split('_')[1];
+        // 加密
+        const token = jwt.sign({ id: user._id }, key);
+        return {
+            message: '登录成功',
+            user: user._id,
+            username: user.username,
+            token: token
+        }
+    }
+
+    async get_user_info(user) {
+        const data = await User.findById(user).populate('fav');
+        console.log(data);
+        return data
+    }
+
+    async user_comment(post_data){
+
+        // 先增加comment数据，再操作article数据
+        const result1=await Comment.create(post_data);
+
+        const article_pre_data=await Article.findById(post_data.article)
+
+        const article_pre_comments=article_pre_data.comments;
+
+        article_pre_comments.push(result1._id);
+        let article_new_comments=article_pre_comments;
+
+        const result2=await Article.findByIdAndUpdate(post_data.article,{
+            $set:{comments:article_new_comments}
+        });
+
+        return '评论成功'
+    }
+
 }
 
 module.exports = IndexService;

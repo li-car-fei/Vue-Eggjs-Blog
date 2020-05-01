@@ -16,6 +16,7 @@ module.exports = app => {
   const get_id = app.middleware.getId();
   const login = app.middleware.login();
   const auth = app.middleware.auth();
+  const indexlogin = app.middleware.indexlogin();
 
   router.get('/', controller.home.index);
 
@@ -55,7 +56,7 @@ module.exports = app => {
   router.get('/index/api/article/:id', response, controller.index.get_article_detail);
 
   // 点赞文章
-  router.get('/index/api/article/fav/:id',response,controller.index.fav_in_article);
+  router.get('/index/api/article/fav/:id', response, controller.index.fav_in_article);
 
 
   // 按照 create 年份 进行归类后的文章数据
@@ -64,5 +65,12 @@ module.exports = app => {
   // 按照 category 进行归类后的文章数据
   router.get('/index/api/tags', response, controller.index.get_tags_articles);
 
+  // 主页用户登录
+  router.post('/index/api/login', indexlogin, controller.index.login);
 
+  // 主页获取用户信息
+  router.get('/index/api/userinfo/:id', response, controller.index.get_user_info);
+
+  // 用户评论文章
+  router.post('/index/api/comment', response, controller.index.user_comment);
 };

@@ -14,7 +14,11 @@ const schema = new mongoose.Schema({
             // 设置或更改时，加密
             return bcrypt.hashSync(value, 10);
         }
-    }
+    },
+    fav: [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Article'
+    }]
 });
 
 module.exports = mongoose.model('User', schema);

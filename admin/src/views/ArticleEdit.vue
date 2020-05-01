@@ -24,6 +24,16 @@
           ></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="评论">
+        <el-select multiple v-model="model.comments" placeholder="请选择评论">
+          <el-option
+            v-for="item in comments"
+            :key="item._id"
+            :label="item.content"
+            :value="item._id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="置顶">
         <el-switch v-model="model.isTop" active-text="是" inactive-text="否"></el-switch>
       </el-form-item>
@@ -46,7 +56,8 @@ export default {
   data() {
     return {
       categories: [],
-      model: {}
+      model: {},
+      comments: []
     };
   },
   methods: {
@@ -73,6 +84,10 @@ export default {
     async fetchCategories() {
       const res = await this.$http.get("/category");
       this.categories = res.data;
+    },
+    async fetchComments() {
+      const res = await this.$http.get("/comment");
+      this.comments = res.data;
     }
     // // 绑定@imgAdd event
     // async $imgAdd(pos, $file) {
@@ -96,6 +111,7 @@ export default {
     // }
   },
   created() {
+    this.fetchComments();
     this.fetchCategories();
     this.id && this.fetchDetail();
   }

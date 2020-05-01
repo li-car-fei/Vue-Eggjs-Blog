@@ -10,6 +10,9 @@ import ArticleEdit from '../views/ArticleEdit.vue'
 import UserList from '../views/UserList.vue'
 import UserEdit from '../views/UserEdit.vue'
 
+import CommentEdit from '@/views/CommentEdit'
+import CommentList from '@/views/CommentList'
+
 import Login from '../views/Login.vue'
 
 Vue.use(VueRouter)
@@ -36,6 +39,10 @@ const router = new VueRouter({
         { path: '/users/list', component: UserList, name: 'users list' },
         { path: '/users/create', component: UserEdit, name: "users create" },
         { path: '/users/create/:id', component: UserEdit, props: true, name: "users create" },
+
+        { path: '/comments/list', component: CommentList, name: 'comments list' },
+        { path: '/comments/create', component: CommentEdit, name: "comments create" },
+        { path: '/comments/create/:id', component: CommentEdit, props: true, name: "comments create" },
       ]
     },
     {

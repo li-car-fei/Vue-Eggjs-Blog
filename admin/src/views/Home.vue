@@ -22,6 +22,11 @@
               <el-menu-item index="/users/create">新建用户</el-menu-item>
               <el-menu-item index="/users/list">用户列表</el-menu-item>
             </el-menu-item-group>
+            <el-menu-item-group>
+              <template slot="title">评论</template>
+              <el-menu-item index="/comments/create">新建评论</el-menu-item>
+              <el-menu-item index="/comments/list">评论列表</el-menu-item>
+            </el-menu-item-group>
           </el-submenu>
         </el-menu>
       </el-aside>

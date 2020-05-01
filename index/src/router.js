@@ -4,6 +4,7 @@ import Index from '@/views/Index'
 import Archive from '@/views/Archive'
 import Article from '@/views/Article'
 import Tags from '@/views/Tags'
+import Mine from '@/views/Mine'
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,11 @@ const router = new VueRouter({
             path: '/tags',
             component: Tags,
             name: 'tags'
+        },
+        {
+            path: '/mine',
+            component: Mine,
+            name: 'mine'
         }
     ]
 });

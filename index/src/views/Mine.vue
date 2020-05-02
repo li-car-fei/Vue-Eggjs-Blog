@@ -23,7 +23,7 @@ export default {
   computed: {
     islogin: {
       get() {
-        return !!(sessionStorage.getItem("user_id") || "");
+        return !!(sessionStorage.getItem("token") || "");
       },
       set(val) {
         console.log(val);
@@ -32,8 +32,8 @@ export default {
   },
 
   created() {
-    this.islogin = !!(sessionStorage.getItem("user_id") || "");
-    this.username = sessionStorage.getItem("username") || "";
+    this.islogin = !!(sessionStorage.getItem("token") || "");
+    //this.username = sessionStorage.getItem("username") || "";
   }
 };
 </script>

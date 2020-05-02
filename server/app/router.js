@@ -69,8 +69,8 @@ module.exports = app => {
   router.post('/index/api/login', indexlogin, controller.index.login);
 
   // 主页获取用户信息
-  router.get('/index/api/userinfo/:id', response, controller.index.get_user_info);
+  router.get('/index/api/userinfo', auth, response, controller.index.get_user_info);
 
   // 用户评论文章
-  router.post('/index/api/comment', response, controller.index.user_comment);
+  router.post('/index/api/comment', auth, response, controller.index.user_comment);
 };

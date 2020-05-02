@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const Article = require('../models/Article');
 const User = require('../models/User');
 const Category = require('../models/Category');
-const Comment=require('../models/Comment')
+const Comment = require('../models/Comment')
 
 const Service = require('egg').Service;
 
@@ -23,7 +23,7 @@ class IndexService extends Service {
             isTop: true                          // isTop 为 true 的
         }).sort({
             'createdAt': -1                  // 按create 时间降序返回
-        }).limit(6);
+        });
     }
 
     async get_pageNum_articles(pageNum) {
@@ -147,20 +147,20 @@ class IndexService extends Service {
         return data
     }
 
-    async user_comment(post_data){
+    async user_comment(post_data) {
 
         // 先增加comment数据，再操作article数据
-        const result1=await Comment.create(post_data);
+        const result1 = await Comment.create(post_data);
 
-        const article_pre_data=await Article.findById(post_data.article)
+        const article_pre_data = await Article.findById(post_data.article)
 
-        const article_pre_comments=article_pre_data.comments;
+        const article_pre_comments = article_pre_data.comments;
 
         article_pre_comments.push(result1._id);
-        let article_new_comments=article_pre_comments;
+        let article_new_comments = article_pre_comments;
 
-        const result2=await Article.findByIdAndUpdate(post_data.article,{
-            $set:{comments:article_new_comments}
+        const result2 = await Article.findByIdAndUpdate(post_data.article, {
+            $set: { comments: article_new_comments }
         });
 
         return '评论成功'

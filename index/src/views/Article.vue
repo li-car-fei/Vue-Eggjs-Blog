@@ -40,9 +40,9 @@
         v-model="comment"
         placeholder="在此可输入评论"
         clearable
-        @keyup.enter="post_comment"
+        @change="post_comment"
       ></el-input>
-      <el-button type="primary" @click="post_comment">发送</el-button>
+      <el-button type="primary" @click="post_comment" :loading='loading'>发送</el-button>
     </div>
   </div>
 </template>
@@ -53,40 +53,46 @@ export default {
     return {
       fav_in: false,
       detail: {},
-      comment: ""
+      comment: "",
+      loading:false
     };
   },
 
   methods: {
     async get_art_detail(id) {
       const res = await this.$http.get(`/article/${id}`);
-      console.log(res.data);
+      //console.log(res.data);
       this.detail = res.data;
     },
     async favin() {
       const id = this.$route.params.id;
       const res = await this.$http.get(`/article/fav/${id}`);
       this.fav_in = true;
-      console.log(res.data);
+      //console.log(res.data);
       this.$message({
         type: "info",
         message: res.data
       });
     },
     async post_comment() {
-      const islogin = !!(sessionStorage.getItem("user_id") || "");
+      const islogin = !!(sessionStorage.getItem("token") || "");
       if (islogin) {
         const post_comment = {
-          user: sessionStorage.getItem("user_id"),
+          //user: sessionStorage.getItem("user_id"),
           article: this.$route.params.id,
           content: this.comment
         };
-        const res = await this.$http.post("/comment", post_comment);
-        console.log(res.data);
+        this.loading=true;
+        const res = await this.$http.post("/comment",post_comment);
+        
         this.$message({
           type: "info",
           message: res.data
         });
+
+        this.comment = "";
+        this.loading=false;
+
         this.get_art_detail(this.$route.params.id);
       } else {
         this.$message({

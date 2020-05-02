@@ -42,8 +42,8 @@ export default {
       console.log(res);
       if (res.status === 200) {
         // 设置token以及username
-        //sessionStorage.setItem("token", res.data.token);
-        sessionStorage.setItem("user_id", res.data.user);
+        sessionStorage.setItem("token", res.data.token);
+        //sessionStorage.setItem("user_id", res.data.user);
         //sessionStorage.setItem("username", res.data.username);
         // 提示信息
         this.$message({

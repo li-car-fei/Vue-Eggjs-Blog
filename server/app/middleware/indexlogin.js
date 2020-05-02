@@ -10,15 +10,15 @@ module.exports = options => {
         };
 
 
-        if (ctx.token && ctx.user) {
+        if (ctx.user) {
             console.log(ctx.token, ctx.user);
 
             // 设置cookies
-            ctx.cookies.set('user_token', ctx.token, {
-                maxAge: 24 * 3600 * 1000,
-                httpOnly: true,
-                encrypt: true
-            });
+            // ctx.cookies.set('user_token', ctx.token, {
+            //     maxAge: 24 * 3600 * 1000,
+            //     httpOnly: true,
+            //     encrypt: true
+            // });
 
             ctx.cookies.set('user', ctx.user, {
                 maxAge: 24 * 3600 * 1000,

@@ -31,13 +31,13 @@ export default {
   },
   methods: {
     async fetchinfo() {
-      const user_id = sessionStorage.getItem("user_id");
-      const res = await this.$http.get(`/userinfo/${user_id}`);
+      //const user_id = sessionStorage.getItem("user_id");
+      const res = await this.$http.get(`/userinfo`);
       console.log(res.data);
       this.info = res.data;
     },
     loginout() {
-      sessionStorage.removeItem("user_id");
+      sessionStorage.removeItem("token");
       this.$message({
         type: "info",
         message: "退出登录"

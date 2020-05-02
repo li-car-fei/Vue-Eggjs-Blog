@@ -82,8 +82,8 @@ class IndexController extends Controller {
         // 看看result
         console.log(result);
 
-        if (result.token) {
-            ctx.token = result.token;
+        if (result.user && result.token) {
+            //ctx.token = result.token;
             ctx.user = result.user;
             ctx.body = result;
             return
@@ -94,23 +94,27 @@ class IndexController extends Controller {
 
     async get_user_info() {
         const { ctx } = this;
-        const user_id = ctx.params.id
 
         const user = ctx.cookies.get('user');
         console.log(user);
 
-        const result = await ctx.service.index.get_user_info(user_id);
+        const result = await ctx.service.index.get_user_info(user);
 
         ctx.body = result
     }
 
-    async user_comment(){
+    async user_comment() {
         const { ctx } = this;
-        console.log(ctx.request.body)
+        console.log(ctx.request.body);
+        const create_data = {
+            user: ctx.cookies.get('user'),
+            article: ctx.request.body.article,
+            content: ctx.request.body.content
+        }
 
-        const result=await ctx.service.index.user_comment(ctx.request.body)
+        const result = await ctx.service.index.user_comment(create_data)
 
-        ctx.body=result
+        ctx.body = result
     }
 }
 

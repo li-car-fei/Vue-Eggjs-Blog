@@ -26,22 +26,25 @@ export default {
   components: { Card },
   data() {
     return {
-      info: {}
+      info: {} //用户信息
     };
   },
   methods: {
+    // 获取用户信息
     async fetchinfo() {
       //const user_id = sessionStorage.getItem("user_id");
       const res = await this.$http.get(`/userinfo`);
-      console.log(res.data);
+      //console.log(res.data);
       this.info = res.data;
     },
+    // 退出登录
     loginout() {
-      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("token"); //清空sessionStorage
       this.$message({
         type: "info",
         message: "退出登录"
       });
+      // 刷新页面
       this.$router.go(0);
     }
   },

@@ -3,6 +3,8 @@
 const Controller = require('egg').Controller;
 
 class IndexController extends Controller {
+
+    // 获取轻安布文章内容
     async get_all_articles() {
         const { ctx } = this;
         const data = await ctx.service.index.get_all_articles();
@@ -10,6 +12,7 @@ class IndexController extends Controller {
         ctx.body = data;
     }
 
+    // 获取置顶文章
     async get_top_articles() {
         const { ctx } = this;
         const data = await ctx.service.index.get_top_articles();
@@ -17,6 +20,7 @@ class IndexController extends Controller {
         ctx.body = data;
     }
 
+    // 获取指定页码文章
     async get_pageNum_articles() {
         const { ctx } = this;
         // 先拿到请求的页码
@@ -26,6 +30,7 @@ class IndexController extends Controller {
         ctx.body = data;
     }
 
+    // 获取文章详情
     async get_article_detail() {
         const { ctx } = this;
         // 先拿到文章的 _id
@@ -35,6 +40,7 @@ class IndexController extends Controller {
         ctx.body = data;
     }
 
+    // 点赞文章
     async fav_in_article() {
         const { ctx } = this;
         // 先拿到文章的 _id
@@ -44,6 +50,7 @@ class IndexController extends Controller {
         ctx.body = data;
     }
 
+    // 获取年份归类的文章
     async get_years_articles() {
         const { ctx } = this;
         const data = await ctx.service.index.get_years_articles();
@@ -51,6 +58,7 @@ class IndexController extends Controller {
         ctx.body = data;
     }
 
+    // 获取标签分类的文章
     async get_tags_articles() {
         const { ctx } = this;
         const data = await ctx.service.index.get_tags_articles();
@@ -58,12 +66,13 @@ class IndexController extends Controller {
         ctx.body = data;
     }
 
+    // 处理登录
     async login() {
         const { ctx } = this;
 
         const { username, password } = ctx.request.body;
 
-        console.log(username, password);
+        //console.log(username, password);
 
         // 用户名为空
         if (!username) {
@@ -80,7 +89,7 @@ class IndexController extends Controller {
         const result = await ctx.service.index.login(username, password);
 
         // 看看result
-        console.log(result);
+        //console.log(result);
 
         if (result.user && result.token) {
             //ctx.token = result.token;
@@ -92,20 +101,22 @@ class IndexController extends Controller {
         ctx.body = result;
     }
 
+    // 获取用户信息
     async get_user_info() {
         const { ctx } = this;
 
         const user = ctx.cookies.get('user');
-        console.log(user);
+        //console.log(user);
 
         const result = await ctx.service.index.get_user_info(user);
 
         ctx.body = result
     }
 
+    // 用户评论当前文章
     async user_comment() {
         const { ctx } = this;
-        console.log(ctx.request.body);
+        //console.log(ctx.request.body);
         const create_data = {
             user: ctx.cookies.get('user'),
             article: ctx.request.body.article,
@@ -113,6 +124,33 @@ class IndexController extends Controller {
         }
 
         const result = await ctx.service.index.user_comment(create_data)
+
+        ctx.body = result
+    }
+
+    async fav_in_user() {
+        const { ctx } = this;
+
+        const user_id = ctx.cookies.get('user');
+        const article_id = ctx.params.id;
+
+        const result = await ctx.service.index.fav_in_user(user_id, article_id);
+        //console.log(result);
+
+        ctx.body = {
+            result
+        }
+    }
+
+    async user_fav_push() {
+        const { ctx } = this;
+        const { article_id, user_fav_change } = ctx.request.body;
+        //console.log(article_id, user_fav_change);
+
+        const user_id = ctx.cookies.get('user');
+
+        const result = await ctx.service.index.user_fav_change(article_id, user_id, user_fav_change);
+        //console.log(result);
 
         ctx.body = result
     }

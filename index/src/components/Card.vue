@@ -21,6 +21,7 @@ export default {
   },
 
   methods: {
+    // 路由跳转到文章详情
     detail() {
       this.$router.push(`/article/${this.blog._id}`);
     }

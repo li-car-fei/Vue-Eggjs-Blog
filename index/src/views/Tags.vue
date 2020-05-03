@@ -30,11 +30,12 @@ export default {
   components: { Card },
   data() {
     return {
-      tags_list: []
+      tags_list: [] //标签分类的文章列表
     };
   },
 
   methods: {
+    // 获取标签分类的文章列表
     async get_tags_list() {
       const res = await this.$http.get("/tags");
       // console.log(res.data);

@@ -4,7 +4,7 @@ import Vue from 'vue'
 const http = axios.create({
     baseURL: 'http://127.0.0.1:7001/index/api',
     withCredentials: true,
-    crossDomain: true
+    crossDomain: true                      // 跨域
 });
 
 // request 拦截器，设置请求头中的token

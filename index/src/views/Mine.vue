@@ -22,6 +22,7 @@ export default {
   //  },
   computed: {
     islogin: {
+      // computed islogin
       get() {
         return !!(sessionStorage.getItem("token") || "");
       },

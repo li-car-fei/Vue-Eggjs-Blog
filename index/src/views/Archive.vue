@@ -40,6 +40,7 @@ export default {
   },
 
   methods: {
+    // 获取年份归类的文章列表
     async get_year_list() {
       const res = await this.$http.get("/archive");
       this.year_list = res.data;

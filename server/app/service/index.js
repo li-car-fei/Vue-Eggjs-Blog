@@ -14,10 +14,13 @@ const Comment = require('../models/Comment')
 const Service = require('egg').Service;
 
 class IndexService extends Service {
+
+    // 获取全部文章内容
     async get_all_articles() {
         return await Article.find()
     }
 
+    // 获取置顶文章列表
     async get_top_articles() {
         return await Article.find().where({
             isTop: true                          // isTop 为 true 的
@@ -26,6 +29,7 @@ class IndexService extends Service {
         });
     }
 
+    // 获取指定页码的文章列表信息
     async get_pageNum_articles(pageNum) {
         const list = await Article.find().sort({
             'createdAd': -1                         // 按create 时间降序返回
@@ -41,9 +45,13 @@ class IndexService extends Service {
         }
     }
 
+    // 获取文章内容详情
     async get_article_detail(id) {
+        // 先read +1
         const pre_data = await Article.findById(id);
         const change_read = pre_data.read + 1;
+
+        // update
         await Article.findByIdAndUpdate((id), {
             $set: { read: change_read }
         })
@@ -57,19 +65,24 @@ class IndexService extends Service {
 
     }
 
+    // 处理点赞当前文章
     async fav_in_article(id) {
         const pre_data = await Article.findById(id);
+
+        // fav +1
         const change_fav = pre_data.fav + 1;
 
+        // update
         const res = await Article.findByIdAndUpdate(id, {
             $set: { fav: change_fav }
         });
 
-        console.log(res);
+        //console.log(res);
 
         return '点赞成功'
     }
 
+    // 根据年份返回文章列表
     async get_years_articles() {
         return await Article.aggregate([            // aggregate 聚合  一层一层地处理数据
             {
@@ -101,6 +114,7 @@ class IndexService extends Service {
         ]);
     }
 
+    // 根据标签分类返回文章列表
     async get_tags_articles() {
         return await Category.aggregate([
             {
@@ -114,9 +128,11 @@ class IndexService extends Service {
         ]);
     }
 
+    // 处理登录操作
     async login(username, password) {
         // 查询user， 带上password返回
         const user = await User.findOne({ username }).select('+password');
+        // 找不到user
         if (!user) {
             return '用户名错误'
         };
@@ -141,31 +157,111 @@ class IndexService extends Service {
         }
     }
 
+    // 获取用户信息
     async get_user_info(user) {
         const data = await User.findById(user).populate('fav');
-        console.log(data);
+        //console.log(data);
         return data
     }
 
+    // 添加评论
     async user_comment(post_data) {
 
         // 先增加comment数据，再操作article数据
         const result1 = await Comment.create(post_data);
 
+        // 现根据article _id 获取文章内容
         const article_pre_data = await Article.findById(post_data.article)
 
+        // comments
         const article_pre_comments = article_pre_data.comments;
 
+        // push 更改
         article_pre_comments.push(result1._id);
         let article_new_comments = article_pre_comments;
 
+        // update
         const result2 = await Article.findByIdAndUpdate(post_data.article, {
             $set: { comments: article_new_comments }
         });
 
-        return '评论成功'
+        // 返回更改后的数据  并且要populate
+        const article_detail = await Article.findById(post_data.article).populate('categories')
+            .populate({
+                path: 'comments',
+                populate: { path: 'user', select: 'username' }
+            });
+
+        return {
+            message: '评论成功',
+            data: article_detail
+        }
     }
 
+    // 判断当前用户是否收藏当前文章
+    async fav_in_user(user_id, article_id) {
+        const user_data = await User.findById(user_id, 'fav');
+        // fav
+        const user_fav = user_data.fav;
+        //console.log(user_fav);
+
+        // some判断
+        const bool = user_fav.some(art => art == article_id);
+        //console.log(bool);
+
+        return bool
+    }
+
+    // 更改当前用户对当前文章的收藏状态
+    async user_fav_change(article_id, user_id, user_fav_change) {
+        if (user_fav_change) {
+            // 收藏此文章
+            const user_data = await User.findById(user_id, 'fav');
+            // fav数组中添加当前文章_id
+            user_data.fav.push(article_id);
+
+            const new_user_fav = user_data.fav;
+            //console.log(new_user_fav);
+
+            // update
+            const result = await User.findByIdAndUpdate(user_id, {
+                $set: { fav: new_user_fav }
+            });
+            if (result) {
+                return {
+                    message: '收藏成功',
+                    result: result
+                }
+            }
+            return 'error'
+        }
+
+        // 取消收藏此文章
+        const user_data = await User.findById(user_id, 'fav');
+        const user_fav = user_data.fav;
+
+        // find index
+        const index = user_fav.findIndex(art => art == article_id);
+        //console.log(index);
+
+        // 更改fav数组
+        user_fav.splice(index, 1);
+        //console.log(user_fav);
+
+        // update
+        const result = await User.findByIdAndUpdate(user_id, {
+            $set: { fav: user_fav }
+        });
+        //console.log(result);
+
+        if (result) {
+            return {
+                message: '取消收藏成功',
+                result: result
+            }
+        }
+        return 'error'
+    }
 }
 
 module.exports = IndexService;

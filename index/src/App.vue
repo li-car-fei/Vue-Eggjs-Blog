@@ -52,10 +52,11 @@ export default {
   name: "App",
   data() {
     return {
-      isCollapse: true
+      isCollapse: true //导航栏展开
     };
   },
   methods: {
+    // 路由跳转
     golink(event) {
       //console.log(event.index);
       switch (parseInt(event.index)) {
@@ -78,9 +79,11 @@ export default {
           });
       }
     },
+    // 返回上一页面
     goback() {
       this.$router.back(-1);
     },
+    // 提示消息
     notice() {
       this.$notify.info({
         title: "carfield 信息",

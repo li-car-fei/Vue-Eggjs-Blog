@@ -11,6 +11,7 @@ module.exports = app => {
 
   db(app);
 
+  // 引入中间件
   const resource = app.middleware.resource();
   const response = app.middleware.response();
   const get_id = app.middleware.getId();
@@ -56,8 +57,13 @@ module.exports = app => {
   router.get('/index/api/article/:id', response, controller.index.get_article_detail);
 
   // 点赞文章
-  router.get('/index/api/article/fav/:id', response, controller.index.fav_in_article);
+  router.get('/index/api/article/fav/:id', auth, response, controller.index.fav_in_article);
 
+  // 检查当前用户有无收藏文章
+  router.get('/index/api/article/favinuser/:id', auth, response, controller.index.fav_in_user);
+
+  // 当前用户收藏一篇文章
+  router.put('/index/api/article/user/fav', auth, response, controller.index.user_fav_push);
 
   // 按照 create 年份 进行归类后的文章数据
   router.get('/index/api/archive', response, controller.index.get_years_articles);

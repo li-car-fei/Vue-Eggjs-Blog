@@ -89,26 +89,6 @@ export default {
       const res = await this.$http.get("/comment");
       this.comments = res.data;
     }
-    // // 绑定@imgAdd event
-    // async $imgAdd(pos, $file) {
-    //   // 第一步.将图片上传到服务器.
-    //   var formdata = new FormData();
-    //   formdata.append("file", $file);
-    //   const res = await this.$http.post("/upload", formdata);
-    //   // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-    //   this.$refs.md.$img2Url(pos, res.data.url);
-
-    //   // axios({
-    //   //   url: "",
-    //   //   method: "post",
-    //   //   data: formdata,
-    //   //   headers: { "Content-Type": "multipart/form-data" }
-    //   // }).then(url => {
-    //   //   // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-    //   //   // $vm.$img2Url 详情见本页末尾
-    //   //   $vm.$img2Url(pos, url);
-    //   // });
-    // }
   },
   created() {
     this.fetchComments();

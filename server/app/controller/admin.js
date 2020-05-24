@@ -1,6 +1,9 @@
 'use strict';
 
 const Controller = require('egg').Controller;
+const fs = require('fs');
+const path = require('path');
+const pump = require('mz-modules/pump')
 
 class AdminController extends Controller {
     async get_source() {
@@ -22,7 +25,7 @@ class AdminController extends Controller {
 
         const data = await ctx.service.admin.get_source_id(ctx.Model, ctx.resource_id);
 
-        console.log(data);
+        //console.log(data);
 
         ctx.body = data;
 
@@ -35,7 +38,7 @@ class AdminController extends Controller {
 
         const result = await ctx.service.admin.create_source(ctx.Model, ctx.request.body);
 
-        console.log(result);
+        //console.log(result);
 
         if (result) {
             // 搞个response中间件设置status
@@ -57,7 +60,7 @@ class AdminController extends Controller {
     async update_source() {
         const { ctx } = this;
 
-        console.log(ctx.request.body);
+        //console.log(ctx.request.body);
 
         const result = await ctx.service.admin.update_source(ctx.Model, ctx.resource_id, ctx.request.body);
 
@@ -90,7 +93,7 @@ class AdminController extends Controller {
         const result = await ctx.service.admin.login(username, password);
 
         // 看看result
-        console.log(result);
+        //console.log(result);
 
         if (result.token) {
             ctx.token = result.token;
@@ -102,6 +105,37 @@ class AdminController extends Controller {
 
 
     }
+
+    async uploadImg() {
+        //console.log('调用了')
+        let parts = this.ctx.multipart({ autoFields: true });
+        let stream
+        let fileUrl
+        //, img_list = [];//图片访问地址集合
+        while ((stream = await parts()) != null) {
+            // 如果不是文件，继续循环
+            if (!stream.filename) {
+                break;
+            }
+            // 文件名为：时间戳+随机字符串+.文件后缀
+            let filename = (new Date()).getTime() + Math.random().toString(36).substr(2) + path.extname(stream.filename).toLocaleLowerCase();
+            // 上传图片的目录
+            let target = 'app/public/upload/' + filename;
+            fileUrl = 'http://127.0.0.1:7001/public/upload/' + filename
+            //img_list.push('/public/upload/' + filename);
+            let writeStream = fs.createWriteStream(target);
+            await pump(stream, writeStream);
+        }
+        //console.log(parts.field) // 表单其他数据，userid
+
+        // 把地址存入mongodb
+        const result = await this.ctx.service.admin.update_userImg(parts.field.userid, fileUrl);
+        //console.log(result)
+
+        this.ctx.body = result.imgUrl;
+    }
+
+
 }
 
 module.exports = AdminController;

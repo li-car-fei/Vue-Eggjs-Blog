@@ -15,6 +15,9 @@ const schema = new mongoose.Schema({
             return bcrypt.hashSync(value, 10);
         }
     },
+    imgUrl: {
+        type: String
+    },
     fav: [{
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'Article'

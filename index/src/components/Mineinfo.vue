@@ -5,6 +5,9 @@
       <span>
         <el-button @click="loginout" type="text">退出登录</el-button>
       </span>
+      <div>
+        <img :src="info.imgUrl" width="100px" height="100px" style="border-radius:50px" />
+      </div>
       <el-divider content-position="left">你好，许久未见，甚是想念</el-divider>
     </div>
     <el-button type="primary">收藏文章</el-button>

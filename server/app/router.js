@@ -41,6 +41,9 @@ module.exports = app => {
   // 创建资源
   router.post('/admin/api/:resource', auth, response, resource, controller.admin.create_source);
 
+  // 上传图片资源
+  router.post('/admin/api/upload/img', auth, response, controller.admin.uploadImg);
+
 
   // index
 

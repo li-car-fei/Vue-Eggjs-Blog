@@ -42,6 +42,14 @@ class AdminService extends Service {
         return result
     }
 
+    async update_userImg(userid, fileUrl) {
+        const result = await User.findByIdAndUpdate(userid, {
+            $set: { imgUrl: fileUrl }
+        });
+
+        return result
+    }
+
     async login(username, password) {
         // 查询user， 带上password返回
         const user = await User.findOne({ username }).select('+password');
@@ -64,7 +72,7 @@ class AdminService extends Service {
         const token = jwt.sign({ id: user._id }, key);
         return {
             message: '登录成功',
-            username:user.username,
+            username: user.username,
             token: token
         }
 

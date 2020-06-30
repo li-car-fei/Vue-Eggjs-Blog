@@ -34,7 +34,7 @@ class AdminController extends Controller {
     async create_source() {
         const { ctx } = this;
 
-        console.log(ctx.request.body);
+        //console.log(ctx.request.body);
 
         const result = await ctx.service.admin.create_source(ctx.Model, ctx.request.body);
 
@@ -107,7 +107,6 @@ class AdminController extends Controller {
     }
 
     async uploadImg() {
-        //console.log('调用了')
         let parts = this.ctx.multipart({ autoFields: true });
         let stream
         let fileUrl
@@ -120,8 +119,8 @@ class AdminController extends Controller {
             // 文件名为：时间戳+随机字符串+.文件后缀
             let filename = (new Date()).getTime() + Math.random().toString(36).substr(2) + path.extname(stream.filename).toLocaleLowerCase();
             // 上传图片的目录
-            let target = 'app/public/upload/' + filename;
-            fileUrl = 'http://127.0.0.1:7001/public/upload/' + filename
+            let target = 'app/public/avator/' + filename;
+            fileUrl = 'http://127.0.0.1:7001/public/avator/' + filename
             //img_list.push('/public/upload/' + filename);
             let writeStream = fs.createWriteStream(target);
             await pump(stream, writeStream);
@@ -130,9 +129,25 @@ class AdminController extends Controller {
 
         // 把地址存入mongodb
         const result = await this.ctx.service.admin.update_userImg(parts.field.userid, fileUrl);
-        //console.log(result)
 
-        this.ctx.body = result.imgUrl;
+        this.ctx.body = fileUrl;
+    }
+
+    async uploadMarkdownImg() {
+        let parts = this.ctx.multipart({ autoFields: true });
+        let stream
+        let fileUrl
+        while ((stream = await parts()) != null) {
+            if (!stream.filename) {
+                break;
+            }
+            let filename = (new Date()).getTime() + Math.random().toString(36).substr(2) + path.extname(stream.filename).toLocaleLowerCase();
+            let target = 'app/public/markdown/' + filename;
+            fileUrl = 'http://127.0.0.1:7001/public/markdown/' + filename
+            let writeStream = fs.createWriteStream(target);
+            await pump(stream, writeStream);
+        };
+        this.ctx.body = fileUrl
     }
 
 

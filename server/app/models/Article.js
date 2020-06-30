@@ -7,9 +7,16 @@ const schema = new mongoose.Schema({
         default: false
     },
     summary: { type: String },
-    body: { type: String },
-    read: { type: Number },
-    fav: { type: Number },
+    body: { type: String },             // 编译后的html内容
+    MdContent: { type: String },     // md值
+    read: {
+        type: Number,
+        default: 1
+    },
+    fav: {
+        type: Number,
+        default: 0
+    },
     categories: [{
         type: mongoose.SchemaTypes.ObjectId,       // 指向 外键
         ref: 'Category'

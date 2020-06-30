@@ -14,7 +14,7 @@ module.exports = options => {
         //     encrypt: true
         // }));
 
-        console.log(token);
+        //console.log(token);
 
         //console.log(ctx.request.url);
 
@@ -60,7 +60,7 @@ module.exports = options => {
         }
 
 
-         await next()
+        await next()
     }
 
 }

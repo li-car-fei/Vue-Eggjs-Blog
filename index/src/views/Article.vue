@@ -28,7 +28,7 @@
       <span>updatedAt: {{detail.updatedAt|date}}</span>
     </div>
     <hr />
-    <article style="color:rgb(62, 132, 179);letter-spacing:1.5px">{{detail.body}}</article>
+    <article v-html="detail.body"></article>
     <hr />
     <div style="color:rgb(85, 133, 165);margin-top:8px">评论区：</div>
     <el-card

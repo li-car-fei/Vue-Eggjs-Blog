@@ -13,7 +13,7 @@
     "dayjs": "^1.8.24",
     "element-ui": "^2.13.1",
     "mavon-editor": "^2.8.3",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "sass-loader": "^7.3.1",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6"
